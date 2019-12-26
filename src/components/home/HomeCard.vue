@@ -3,27 +3,18 @@
     <div class="home-card-inner">
       <div class="user-info">
         <div class="avatar-wrapper">
-          <image-view src="https://www.youbaobao.xyz/mpvue-res/logo.jpg" round></image-view>
+          <image-view :src="avatar" round></image-view>
         </div>
-        <div class="nickname">{{'一米阳光'}}</div>
-        <div class="shelf-text">书架共有{{'3'}}本好书</div>
+        <div class="nickname">{{nickname}}</div>
+        <div class="shelf-text">书架共有{{data.num}}本好书</div>
         <div class="round-item"></div>
         <div class="shelf-text">特别精选</div>
       </div>
 
       <div class="book-info">
         <div class="book-wrapper">
-          <div class="book-img-wrapper">
-            <image-view
-              src="https://www.youbaobao.xyz/book/res/img//EarthSciences/978-981-10-3713-9_CoverFigure.jpg"></image-view>
-          </div>
-          <div class="book-img-wrapper">
-            <image-view
-              src="https://www.youbaobao.xyz/book/res/img//EarthSciences/978-981-10-3713-9_CoverFigure.jpg"></image-view>
-          </div>
-          <div class="book-img-wrapper">
-            <image-view
-              src="https://www.youbaobao.xyz/book/res/img//EarthSciences/978-981-10-3713-9_CoverFigure.jpg"></image-view>
+          <div class="book-img-wrapper" v-for="(item,index) in bookList" :key="index" @click="onBookClick">
+            <image-view :src="item.cover"></image-view>
           </div>
 
         </div>
@@ -57,10 +48,22 @@
         default: 0
       }
     },
+    computed: {
+      avatar () {
+        return this.data && this.data.userInfo && this.data.userInfo.avatar
+      },
+      nickname () {
+        return this.data && this.data.userInfo && this.data.userInfo.nickname
+      },
+      bookList () {
+        return (this.data && this.data.bookList) || []
+      }
+    },
     methods: {
       gotoShelf () {
       },
       onBookClick () {
+        this.$emit('onClick')
       },
       sign () {
       },
