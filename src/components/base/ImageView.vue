@@ -49,12 +49,10 @@
       onError () {
         this.isLoading = false
         this.error = true
-        console.log('onerror')
       },
       onLoad () {
         this.isLoading = false
         this.error = false
-        console.log('onload')
       }
     }
   }
