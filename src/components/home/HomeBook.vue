@@ -154,6 +154,7 @@
               &.book-title-row {
                 flex: 0 0 50%;
                 padding: 10px;
+                display: flex;
                 flex-direction: column;
                 justify-content: space-between;
 
