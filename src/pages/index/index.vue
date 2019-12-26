@@ -1,6 +1,6 @@
 <template>
   <div class="home">
-    <SearchBar></SearchBar>
+    <SearchBar :disabled="false" @onClick="onSearchBarClick"></SearchBar>
   </div>
 </template>
 
@@ -9,7 +9,10 @@
 
   export default {
     components: {SearchBar},
-    methods: {}
+    methods: {
+      onSearchBarClick () {
+      }
+    }
   }
 </script>
 
