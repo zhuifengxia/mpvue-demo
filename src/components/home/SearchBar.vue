@@ -1,6 +1,6 @@
 <template>
   <div class="search-bar">
-    <div class="search-bar-wrapper">
+    <div class="search-bar-wrapper" @click="onSearchBarClick">
       <van-icon class="search" name="search" size="16px" color="#858c96"></van-icon>
       <input :focus="focus" :disabled="disabled" :maxlength="limit"
              :placeholder="hotSearch.length==0?'搜索':hotSearch" @input="onChange" v-model="searchWord"

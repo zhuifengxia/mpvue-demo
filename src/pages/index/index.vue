@@ -76,6 +76,7 @@
         }
       },
       onSearchBarClick () {
+        this.$router.push('/pages/search/main')
       },
       onBannerClick () {
         console.log('banner click')
