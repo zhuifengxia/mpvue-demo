@@ -1,18 +1,21 @@
 <template>
   <div class="home">
-    <search-bar :disabled="false" @onClick="onSearchBarClick" :hot-search="hotSearch"></search-bar>
+    <search-bar :disabled="true" @onClick="onSearchBarClick" :hot-search="hotSearch"></search-bar>
     <home-card :data="homeCard"/>
     <home-banner img="http://www.youbaobao.xyz/book/res/bg.jpg" title="mpvue2.0实战多端小程序课程上线啦" sub-title="立即体验"
                  @onClick="onBannerClick"></home-banner>
     <div class="home-book">
       <home-book title="为你推荐" :row="1" :col="3" :data="recommend" mode="col" btn-text="换一批"
-                 @onMoreClick="onBookMoreClick" @onBookClick="onHomeBookClick"></home-book>
+                 @onMoreClick="recommendChange('recommend')" @onBookClick="onHomeBookClick"></home-book>
+
       <home-book title="免费阅读" :row="2" :col="2" :data="freeRead" mode="row" btn-text="换一批"
-                 @onMoreClick="onBookMoreClick" @onBookClick="onHomeBookClick"></home-book>
+                 @onMoreClick="recommendChange('freeRead')" @onBookClick="onHomeBookClick"></home-book>
+
       <home-book title="当前最热" :row="1" :col="4" :data="hotBook" mode="col" btn-text="换一批"
-                 @onMoreClick="onBookMoreClick" @onBookClick="onHomeBookClick"></home-book>
+                 @onMoreClick="recommendChange('hotBook')" @onBookClick="onHomeBookClick"></home-book>
+
       <home-book title="分类" :row="3" :col="2" :data="category" mode="category" btn-text="查看全部"
-                 @onMoreClick="onBookMoreClick" @onBookClick="onHomeBookClick"></home-book>
+                 @onMoreClick="onCategoryMoreClick" @onBookClick="onHomeBookClick"></home-book>
     </div>
 
   </div>
@@ -23,7 +26,7 @@
   import HomeCard from '../../components/home/HomeCard'
   import HomeBanner from '../../components/home/HomeBanner'
   import HomeBook from '../../components/home/HomeBook'
-  import {getHomeData} from '../../api/index'
+  import {getHomeData, recommend, freeRead, hotBook} from '../../api/index'
 
   export default {
     components: {HomeBook, HomeBanner, HomeCard, SearchBar},
@@ -42,6 +45,26 @@
       this.getHomeData()
     },
     methods: {
+      recommendChange (key) {
+        console.log(key)
+        switch (key) {
+          case 'recommend':
+            recommend().then(res => {
+              this.recommend = res.data.data
+            })
+            break
+          case 'freeRead':
+            freeRead().then(res => {
+              this.freeRead = res.data.data
+            })
+            break
+          case 'hotBook':
+            hotBook().then(res => {
+              this.hotBook = res.data.data
+            })
+            break
+        }
+      },
       getHomeData () {
         getHomeData({
           openId: '1234'
@@ -65,8 +88,6 @@
               nickname: '一米阳光'
             }
           }
-        }).catch(err => {
-          console.log('buhoyis' + err)
         })
       },
       onSearchBarClick () {
@@ -74,7 +95,7 @@
       onBannerClick () {
         console.log('banner click')
       },
-      onBookMoreClick () {
+      onCategoryMoreClick () {
         console.log('onBookMoreClick')
       },
       onHomeBookClick () {

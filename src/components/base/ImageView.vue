@@ -34,6 +34,10 @@
     },
     watch: {
       src (newValue, preValue) {
+        if (newValue && newValue.length > 0 && newValue !== preValue) {
+          this.isLoading = true
+          this.error = false
+        }
       }
     },
     data () {
@@ -64,6 +68,7 @@
 
     .image {
       width: 100%;
+
       &.round {
         border-radius: 50%;
       }

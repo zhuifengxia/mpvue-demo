@@ -130,6 +130,7 @@
         display: flex;
         flex-flow: row nowrap;
         margin-top: 12px;
+        justify-content: center;
 
         .home-book-col {
           padding: 0 8px;
