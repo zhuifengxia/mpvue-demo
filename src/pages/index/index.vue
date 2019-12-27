@@ -65,6 +65,8 @@
               nickname: '一米阳光'
             }
           }
+        }).catch(err => {
+          console.log('buhoyis' + err)
         })
       },
       onSearchBarClick () {
