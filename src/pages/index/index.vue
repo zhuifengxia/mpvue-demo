@@ -31,7 +31,15 @@
   import HomeBook from '../../components/home/HomeBook'
   import Auth from '../../components/base/Auth'
   import {getHomeData, recommend, freeRead, hotBook, register} from '../../api/index'
-  import {getSetting, getUserInfo, setStorageSync, getStorageSync, getUserOpenId} from '../../api/wechat'
+  import {
+    getSetting,
+    getUserInfo,
+    setStorageSync,
+    getStorageSync,
+    getUserOpenId,
+    showLoading,
+    hideLoading
+  } from '../../api/wechat'
 
   export default {
     components: {HomeBook, HomeBanner, HomeCard, SearchBar, Auth},
@@ -98,6 +106,10 @@
             num: shelfCount,
             userInfo: userInfo
           }
+          hideLoading()
+        }).catch(err => {
+          console.log(err)
+          hideLoading()
         })
       },
       getUserInfo () {
@@ -125,8 +137,8 @@
           'userInfo',
           () => {
             this.isAuth = true
+            showLoading('正在加载')
             this.getUserInfo()
-            console.log('success')
           }
           , () => {
             this.isAuth = false
