@@ -7,7 +7,7 @@
 
     <detail-rate :rate-value="book.rateValue" @onRateChange="onRateChange"></detail-rate>
 
-    <detail-contents :contents="contents" @readBook="readBook" v-if="contents"></detail-contents>
+    <detail-contents :contents="contents" @readBook="readBook"></detail-contents>
 
     <detail-bottom :isInShelf="isInShelf" @handleShelf="handleShelf"></detail-bottom>
   </div>

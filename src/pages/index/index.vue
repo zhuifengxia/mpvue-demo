@@ -16,7 +16,7 @@
                    @onMoreClick="recommendChange('hotBook')" @onBookClick="onHomeBookClick"></home-book>
 
         <home-book title="分类" :row="3" :col="2" :data="category" mode="category" btn-text="查看全部"
-                   @onMoreClick="onCategoryMoreClick" @onBookClick="onHomeBookClick"></home-book>
+                   @onMoreClick="onCategoryMoreClick" @onBookClick="oncategoryClick"></home-book>
       </div>
     </div>
     <auth v-if="!isAuth" @getUserInfo="init"></auth>
@@ -87,13 +87,23 @@
         console.log('banner click')
       },
       onCategoryMoreClick () {
-        console.log('onBookMoreClick')
+        this.$router.push({
+          path: '/pages/categoryList/main'
+        })
       },
       onHomeBookClick (book) {
         this.$router.push({
           path: '/pages/detail/main',
           query: {
             fileName: book.fileName
+          }
+        })
+      },
+      oncategoryClick (category) {
+        this.$router.push({
+          path: '/pages/list/main',
+          query: {
+            key: 'categoryId', text: category.category, title: category.categoryText
           }
         })
       },
