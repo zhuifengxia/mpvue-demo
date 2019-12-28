@@ -2,7 +2,7 @@
   <div>
     <div class="home" v-if="isAuth">
       <search-bar :disabled="true" @onClick="onSearchBarClick" :hot-search="hotSearch"></search-bar>
-      <home-card :data="homeCard" @onClick="onHomeBookClick"/>
+      <home-card :data="homeCard" @onClick="onHomeBookClick" />
       <home-banner img="http://www.youbaobao.xyz/book/res/bg.jpg" title="mpvue2.0实战多端小程序课程上线啦" sub-title="立即体验"
                    @onClick="onBannerClick"></home-banner>
       <div class="home-book">
