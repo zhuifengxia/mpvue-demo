@@ -8,7 +8,6 @@ export function getSetting (auth, onSuccess, onFail) {
       } else {
         onFail(res)
       }
-      console.log(res)
     },
     fail (err) {
       console.log(err)

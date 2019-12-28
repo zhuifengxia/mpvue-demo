@@ -2,7 +2,7 @@
   <div>
     <div class="home" v-if="isAuth">
       <search-bar :disabled="true" @onClick="onSearchBarClick" :hot-search="hotSearch"></search-bar>
-      <home-card :data="homeCard"/>
+      <home-card :data="homeCard" @onClick="onHomeBookClick"/>
       <home-banner img="http://www.youbaobao.xyz/book/res/bg.jpg" title="mpvue2.0实战多端小程序课程上线啦" sub-title="立即体验"
                    @onClick="onBannerClick"></home-banner>
       <div class="home-book">
@@ -89,8 +89,13 @@
       onCategoryMoreClick () {
         console.log('onBookMoreClick')
       },
-      onHomeBookClick () {
-        console.log('onHomeBookClick')
+      onHomeBookClick (book) {
+        this.$router.push({
+          path: '/pages/detail/main',
+          query: {
+            fileName: book.fileName
+          }
+        })
       },
       getHomeData (openId, userInfo) {
         getHomeData({
@@ -125,7 +130,6 @@
         }
         getUserInfo(
           (userInfo) => {
-            console.log(userInfo)
             setStorageSync('userInfo', userInfo)
             const openId = getStorageSync('openId')
             if (!openId || openId.length === 0) {

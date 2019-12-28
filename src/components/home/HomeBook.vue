@@ -6,7 +6,7 @@
         <div class="home-book-col" v-for="(book,bookIndex) in item" :key="bookIndex"
              :style="{flex:'0 0 '+(100/col)+'%'}">
           <div class="book-wrapper" :style="{flexDirection:mode===HOME_BOOK_MODE.COL?'column':'row'}"
-               @click="onBookClick" v-if="mode===HOME_BOOK_MODE.ROW||mode===HOME_BOOK_MODE.COL">
+               @click="onBookClick(book)" v-if="mode===HOME_BOOK_MODE.ROW||mode===HOME_BOOK_MODE.COL">
             <image-view :src="book.cover"></image-view>
             <div class="book-title-wrapper book-title-col" v-if="mode===HOME_BOOK_MODE.COL">
               <div class="book-title">{{book.title}}</div>
@@ -107,8 +107,8 @@
       onMoreClick () {
         this.$emit('onMoreClick')
       },
-      onBookClick () {
-        this.$emit('onBookClick')
+      onBookClick (item) {
+        this.$emit('onBookClick', item)
       }
     }
   }
