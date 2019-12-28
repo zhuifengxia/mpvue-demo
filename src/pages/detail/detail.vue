@@ -9,7 +9,7 @@
 
     <detail-contents :contents="contents" @readBook="readBook"></detail-contents>
 
-    <detail-bottom :isInShelf="isInShelf" @handleShelf="handleShelf"></detail-bottom>
+    <detail-bottom :isInShelf="isInShelf" @handleShelf="handleShelf" @readBook="readBook"></detail-bottom>
   </div>
 </template>
 <script>
@@ -54,7 +54,24 @@
         }
       },
       readBook (href) {
-        console.log(href)
+        const qurey = {
+          fileName: this.book.fileName,
+          opf: this.book.opf
+        }
+        if (href) {
+          const index = href.indexOf('/')
+          if (index >= 0) {
+            qurey.navigation = href.slice(index + 1)
+          } else {
+            qurey.navigation = href
+          }
+        }
+        if (this.book && this.book.fileName) {
+          this.$router.push({
+            path: '/pages/read/mian',
+            qurey
+          })
+        }
       },
       onRateChange (value) {
         const openId = getStorageSync('openId')
