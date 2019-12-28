@@ -8,7 +8,7 @@
 
     <search-item icon="newspaper-o" :title="publisher" sub-title="Publisher"
                  @onClick="showList(publisher,'publisher')" v-if="publisher"></search-item>
-    <search-table :data="data.book" @onClick="onBookClick"></search-table>
+    <search-table :data="data.book"></search-table>
   </div>
 </template>
 <script>
@@ -45,10 +45,12 @@
     },
     methods: {
       showList (text, key) {
-        console.log(text, key)
-      },
-      onBookClick (book) {
-        console.log(book)
+        this.$router.push({
+          path: '/pages/list/main',
+          query: {
+            text, key, title: text
+          }
+        })
       }
     }
   }

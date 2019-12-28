@@ -70,3 +70,6 @@ export function bookShelfRemove (params) {
     shelf: JSON.stringify(params)
   })
 }
+export function searchList (params) {
+  return get(`${API_URL}/book/search-list`, params)
+}
