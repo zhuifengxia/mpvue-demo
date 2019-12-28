@@ -33,26 +33,37 @@
 </script>
 <style lang="scss" scoped>
   .tag-group-wrapper {
+    margin-top: 35px;
+    width: 100%;
+    padding-bottom: 10px;
+
     .tag-group-header {
       display: flex;
       justify-content: space-between;
       padding: 0 16px;
       color: #333;
       line-height: 20px;
+
       .header-text {
         font-size: 14px;
       }
+
       .header-btn {
         color: #3696ef;
       }
     }
 
     .tag-group {
+      width: 100%;
+      box-sizing: border-box;
       display: flex;
       flex-flow: row wrap;
       padding: 4px 10px 0 10px;
+
       .tag-group-inner {
+        max-width: 100%;
         padding: 12px 6px 0 6px;
+        box-sizing: border-box;
       }
 
     }

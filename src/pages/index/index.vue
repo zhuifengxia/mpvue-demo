@@ -76,7 +76,12 @@
         }
       },
       onSearchBarClick () {
-        this.$router.push('/pages/search/main')
+        this.$router.push({
+          path: '/pages/search/main',
+          query: {
+            hotSearch: this.hotSearch
+          }
+        })
       },
       onBannerClick () {
         console.log('banner click')

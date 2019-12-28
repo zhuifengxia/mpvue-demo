@@ -83,6 +83,8 @@
   .search-bar-input {
     flex: 1;
     margin: 0 8px;
+    color: #333;
+    font-size: 15px;
   }
 
   .search, .clear {

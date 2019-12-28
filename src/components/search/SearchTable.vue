@@ -1,7 +1,7 @@
 <template>
   <div class="search-table-wrapper">
     <div class="search-table-inner">
-      <div class="search-table-book" v-for="(book,index) in data" @click="onClick(book)">
+      <div class="search-table-book" v-for="(book,index) in data" :key="index" @click="onClick(book)">
         <div class="book-img-wrapper">
           <div class="book-img">
             <image-view :src="book.cover"></image-view>

@@ -1,79 +1,126 @@
 <template>
   <div>
-    <tag-group :value="tags" header-text="热门搜索" btn-text="换一批" @onTagClick="onTagClick"
-               @onBtnClick="onBtnClick"></tag-group>
-    <search-item icon="apps-o" title="计算机科学与技术" sub-title="类别"></search-item>
+    <search-bar :focus="searchFocus" :hot-search="hotSearchKeyword" @onChange="onChange"
+                @onClear="onClear" @onConfirm="onConfirm" ref="searchBar"></search-bar>
 
-    <search-table :data="list"></search-table>
+    <tag-group header-text="热门搜索" btn-text="换一批" @onBtnClick="changeHotSearch" @onTagClick="showBookDetail"
+               :value="hotSearchArray" v-if="hotSearchArray.length>0&&!showList"></tag-group>
+
+    <tag-group header-text="历史搜索" btn-text="清空" @onBtnClick="clearHistorySearch" @onTagClick="searchKeyWord"
+               :value="historySearch" v-if="historySearch.length>0&&!showList"></tag-group>
+
+    <search-list :data="searchList" v-if="showList"></search-list>
   </div>
 
 </template>
 <script>
+  import SearchList from '../../components/search/SearchList'
+  import SearchBar from '../../components/home/SearchBar'
   import TagGroup from '../../components/base/TagGroup'
-  import SearchItem from '../../components/search/SearchItem'
-  import SearchTable from '../../components/search/SearchTable'
+  import {getStorageSync, setStorageSync, showToast} from '../../api/wechat'
+  import {search, hotSearch} from '../../api/index'
 
+  const KEY_HISTORY_SEARCH = 'historySearch'
   export default {
-    components: {SearchTable, TagGroup, SearchItem},
+    components: {SearchBar, SearchList, TagGroup},
+    computed: {
+      showList () {
+        const keys = Object.keys(this.searchList)
+        return keys.length > 0
+      },
+      hotSearchArray () {
+        const _hotSearch = []
+        this.hotSearch.forEach(o => _hotSearch.push(o.title))
+        return _hotSearch
+      }
+    },
     data () {
       return {
-        tags: [
-          'aaa',
-          'bbb',
-          'ccc',
-          'ddd',
-          '测试测试测试测试',
-          'mmm'
-        ],
-        list: [
-          {
-            'id': 225,
-            'fileName': '2016_Book_MicrofinanceEUStructuralFundsA',
-            'cover': 'https://www.youbaobao.xyz/book/res/img/Economics/2016_Book_MicrofinanceEUStructuralFundsA.jpeg',
-            'title': 'Microfinance, EU Structural Funds and Capacity Building for Managing Authorities',
-            'author': 'Giovanni Nicola Pes',
-            'publisher': 'Palgrave Macmillan',
-            'bookId': '2016_Book_MicrofinanceEUStructuralFundsA',
-            'category': 3,
-            'categoryText': 'Economics',
-            'language': 'en',
-            'rootFile': 'OEBPS/9781137536013.opf'
-          },
-          {
-            'id': 88,
-            'fileName': '2018_Book_BetweenMobilityAndMigration',
-            'cover': 'https://www.youbaobao.xyz/book/res/img/SocialSciences/978-3-319-77991-1_CoverFigure.jpg',
-            'title': 'Between Mobility and Migration',
-            'author': 'Peter Scholten',
-            'publisher': 'Springer International Publishing',
-            'bookId': '2018_Book_BetweenMobilityAndMigration',
-            'category': 2,
-            'categoryText': 'SocialSciences',
-            'language': 'en',
-            'rootFile': 'OEBPS/package.opf'
-          },
-          {
-            'id': 24,
-            'fileName': '2018_Book_SecurityInComputerAndInformati',
-            'cover': 'https://www.youbaobao.xyz/book/res/img/ComputerScience/978-3-319-95189-8_CoverFigure.jpg',
-            'title': 'Security in Computer and Information Sciences',
-            'author': 'Erol Gelenbe',
-            'publisher': 'Springer International Publishing',
-            'bookId': '2018_Book_SecurityInComputerAndInformati',
-            'category': 1,
-            'categoryText': 'ComputerScience',
-            'language': 'en',
-            'rootFile': 'OEBPS/package.opf'
-          }
-        ]
+        hotSearch: [],
+        hotSearchKeyword: '',
+        historySearch: [],
+        searchList: {},
+        searchFocus: true,
+        openId: '',
+        page: 1
       }
     },
     methods: {
-      onTagClick (text, index) {
-        console.log('tag click', text, index)
+      onConfirm (keyword) {
+        if (!keyword || keyword.trim().length === 0) {
+          keyword = this.hotSearchKeyword
+          this.$refs.searchBar.setValue(keyword)
+        }
+        this.onSearch(keyword)
+        if (!this.historySearch.includes(keyword)) {
+          this.historySearch.push(keyword)
+          setStorageSync(KEY_HISTORY_SEARCH, this.historySearch)
+        }
+        this.searchFocus = false
       },
-      onBtnClick () {
-        console.log('btn click')
+      onClear () {
+        this.searchList = {}
+      },
+      onChange (keyword) {
+        if (!keyword || keyword.trim().length === 0) {
+          this.searchList = {}
+          return
+        }
+        this.page = 1
+        this.onSearch(keyword)
+      },
+      onSearch (keyword) {
+        search({
+          keyword, openId: this.openId, page: this.page
+        }).then(res => {
+          if (this.page > 1) {
+            const {book} = res.data.data
+            if (book && book.length > 0) {
+              this.searchList.book.push(...book)
+            } else {
+              showToast('没有更多数据了')
+            }
+          } else {
+            this.searchList = res.data.data
+          }
+        })
+      },
+      searchKeyWord (text) {
+        this.$refs.searchBar.setValue(text)
+        this.onSearch(text)
+      },
+      clearHistorySearch () {
+        this.historySearch = []
+        setStorageSync(KEY_HISTORY_SEARCH, [])
+      },
+      showBookDetail (text, index) {
+        console.log('show book detail')
+      },
+      changeHotSearch () {
+        hotSearch().then(res => {
+          this.hotSearch = res.data.data
+        })
+      }
+    },
+    mounted () {
+      this.page = 1
+      this.openId = getStorageSync('openId')
+      hotSearch().then(res => {
+        this.hotSearch = res.data.data
+      })
+      this.hotSearchKeyword = this.$route.query.hotSearch
+      this.historySearch = getStorageSync(KEY_HISTORY_SEARCH) || []
+    },
+    onPageScroll () {
+      if (this.searchFocus) {
+        this.searchFocus = false
+      }
+    },
+    onReachBottom () {
+      if (this.showList) {
+        this.page++
+        const searchWord = this.$refs.searchBar.getValue()
+        this.onSearch(searchWord)
       }
     }
   }

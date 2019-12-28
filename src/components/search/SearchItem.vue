@@ -44,8 +44,13 @@
     }
 
     .search-item-info {
+      width: 80%;
       margin-left: 10px;
       .search-item-title {
+        width: 100%;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
         color: #333;
         font-size: 14px;
         line-height: 20px;

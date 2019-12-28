@@ -20,11 +20,13 @@
 </script>
 <style lang="scss" scoped>
   .tag-wrapper {
+    width: 100%;
     display: flex;
     justify-content: center;
     background: #F7F7F9;
     border-radius: 16px;
     padding: 6px 17px;
+    box-sizing: border-box;
 
     .tag {
       text-align: center;
